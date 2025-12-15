@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <title>Timer Settings</title>
+    <meta charset="utf-8" />
+    <script src="https://sdpi-components.dev/releases/v4/sdpi-components.js"></script>
+</head>
+
+<body>
+
+    <sdpi-item label="Bar Fill Color">
+        <sdpi-color id="barFillColor" setting="barFillColor" default="#FFFFFF"></sdpi-color>
+    </sdpi-item>
+
+    <sdpi-item label="Bar Background Color">
+        <sdpi-color id="barBgColor" setting="barBgColor" default="#000000"></sdpi-color>
+    </sdpi-item>
+
+    <script>
+        // Fire on ANY change inside the color element
+        document.addEventListener("input", (ev) => {
+
+            const fillEl = document.getElementById("barFillColor");
+            const bgEl   = document.getElementById("barBgColor");
+
+            if (!fillEl || !bgEl) return;
+
+            // Only react when a color input changes
+            if (!ev.target.closest("sdpi-color")) return;
+
+            $PI.sendToPlugin({
+                liveBarUpdate: true,
+                barFillColor: fillEl.value,
+                barBgColor: bgEl.value
+            });
+        });
+    </script>
+
+</body>
+</html>

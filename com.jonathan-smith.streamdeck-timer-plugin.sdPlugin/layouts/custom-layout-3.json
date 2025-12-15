@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.elgato.com/streamdeck/plugins/layout.json",
+	"id": "custom-layout-3",
+	"items": [
+		{
+			"key": "title",
+			"type": "text",
+			"rect": [25, 6, 150, 50]
+		},
+		{
+			"key": "battery",
+			"type": "bar",
+			"range": { "min": 0, "max": 100 },
+			"rect": [25, 66, 150, 30],
+			"value": 50,
+			"subtype": 4,
+			"border_w": 1,
+			"bar_bg_c": "0:red,0.10:yellow,0.20:#ffffff,1:green",
+			"bar_fill_c": "0:red,0.10:yellow,0.20:#ffffff,1:green"
+		}
+	]
+}

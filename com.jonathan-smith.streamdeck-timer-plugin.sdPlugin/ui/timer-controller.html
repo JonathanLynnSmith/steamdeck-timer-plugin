@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <title>Timer Controller Settings</title>
+    <meta charset="utf-8" />
+    <script src="https://sdpi-components.dev/releases/v4/sdpi-components.js"></script>
+</head>
+
+<body>
+        <!-- Timer settings -->
+    <sdpi-item>
+        <div style="
+            font-size: 16px;
+            font-weight: 600;
+            color: #e5e5e5;
+            margin: 10px 0 6px;
+        ">
+            Timer
+        </div>
+    </sdpi-item>
+    
+
+    <sdpi-item label="Group ID">
+        <sdpi-textfield
+            setting="groupId"
+            placeholder="e.g. timer1"
+            default="timer1">
+        </sdpi-textfield>
+    </sdpi-item>
+    <!-- Display Settings -->
+    <sdpi-item label="Display">
+        <sdpi-select setting="displayPart">
+            <option value="full">Full (HH:MM:SS)</option>
+            <option value="hours">Hours (HH)</option>
+            <option value="minutes">Minutes (MM)</option>
+            <option value="seconds">Seconds (SS)</option>
+            <option value="status">Status</option>
+            <option value="none">None</option>
+        </sdpi-select>
+    </sdpi-item>
+
+    
+    <!-- Behavior settings -->
+    <sdpi-item>
+        <div style="
+            font-size: 16px;
+            font-weight: 600;
+            color: #e5e5e5;
+            margin: 10px 0 6px;
+        ">
+            Behavior
+        </div>
+    </sdpi-item>
+
+
+    <!-- Increment per dial tick -->
+    <sdpi-item label="+/- seconds TEST">
+        <sdpi-textfield
+            setting="incrementSeconds"
+            placeholder="e.g. 5"
+            default="5">
+        </sdpi-textfield>
+    </sdpi-item>
+    
+    <sdpi-item label="Press">
+        <sdpi-select setting="pressAction">
+          <option value="toggle">Start / Pause</option>
+          <option value="inc">Increase Time</option>
+          <option value="dec">Decrease Time</option>
+          <option value="reset">Reset Timer</option>
+          <option value="none">None</option>
+        </sdpi-select>
+      </sdpi-item>
+
+      <sdpi-item label="Hold">
+        <sdpi-select setting="holdAction">
+            <option value="toggle">Start / Pause</option>
+            <option value="inc">Increase Time</option>
+            <option value="dec">Decrease Time</option>
+            <option value="reset">Reset Timer</option>
+            <option value="none">None</option>
+        </sdpi-select>
+      </sdpi-item>
+
+    </sdpi-item>
+    
+
+    <!-- Progress Bar settings -->
+    <sdpi-item>
+        <div style="
+            font-size: 16px;
+            font-weight: 600;
+            color: #e5e5e5;
+            margin: 10px 0 6px;
+        ">
+            Progress Bar
+        </div>
+    </sdpi-item>
+
+    <sdpi-item label="Progress Bar">
+        <sdpi-checkbox
+            id="showProgressBar"
+            setting="showProgressBar"
+            default="true">
+        </sdpi-checkbox>
+    </sdpi-item>
+    
+    <sdpi-item id="progressBarColorItem" label="Background" style="display: none;">
+        <sdpi-color
+            id="barBgColor"
+            setting="barBgColor"
+            default="#000000">
+        </sdpi-color>
+    </sdpi-item>
+
+    <sdpi-item id="progressBarFillColorItem" label="Fill" style="display: none;">
+        <sdpi-color
+            id="barFillColor"
+            setting="barFillColor"
+            default="#FFFFFF">
+        </sdpi-color>
+    </sdpi-item>
+
+    <sdpi-item id="progressBarOutlineColorItem" label="Outline" style="display: none;">
+        <sdpi-color
+            id="barOutlineColor"
+            setting="barOutlineColor"
+            default="#FFFFFF">
+        </sdpi-color>
+    </sdpi-item>
+
+    <sdpi-item id="progressBarResetItem" style="display: none;">
+        <button
+            id="resetProgressBarColors"
+            type="button"
+            style="
+                padding: 6px 12px;
+                border-radius: 6px;
+                border: 1px solid #3a3a3a;
+                background: #2b2b2b;
+                color: #e5e5e5;
+                font-size: 12px;
+                cursor: pointer;
+            "
+        >
+            Reset colors
+        </button>
+    </sdpi-item>
+    
+
+    <script>
+        function updateProgressBarVisibility() {
+            const showProgressBarEl = document.getElementById("showProgressBar");
+            const fillColorItem = document.getElementById("progressBarFillColorItem");
+            const bgColorItem = document.getElementById("progressBarColorItem");
+            const outlineColorItem = document.getElementById("progressBarOutlineColorItem");
+            const resetItem = document.getElementById("progressBarResetItem");
+            
+            if (!showProgressBarEl || !fillColorItem || !bgColorItem || !outlineColorItem || !resetItem) return;
+            
+            // Check if checkbox is checked - try multiple methods to detect state
+            let isChecked = false;
+            
+            // Method 1: Check the value property (for sdpi-checkbox)
+            const value = showProgressBarEl.value;
+            if (value === true || value === "true") {
+                isChecked = true;
+            } else if (value === false || value === "false") {
+                isChecked = false;
+            } else {
+                // Method 2: Check the checked property
+                if (showProgressBarEl.checked !== undefined) {
+                    isChecked = showProgressBarEl.checked === true;
+                } else {
+                    // Method 3: Find the actual checkbox input element inside sdpi-checkbox
+                    const checkboxInput = showProgressBarEl.querySelector('input[type="checkbox"]');
+                    if (checkboxInput) {
+                        isChecked = checkboxInput.checked === true;
+                    } else {
+                        // Method 4: Check if checkbox has 'checked' attribute
+                        isChecked = showProgressBarEl.hasAttribute('checked');
+                    }
+                }
+            }
+            
+            // Default to true if can't determine (matches default="true")
+            if (value === undefined && showProgressBarEl.checked === undefined) {
+                isChecked = true;
+            }
+            
+            const displayValue = isChecked ? "block" : "none";
+            fillColorItem.style.display = displayValue;
+            bgColorItem.style.display = displayValue;
+            outlineColorItem.style.display = displayValue;
+            resetItem.style.display = displayValue;
+            
+            // Force a reflow to ensure the UI updates immediately
+            void fillColorItem.offsetHeight;
+            void bgColorItem.offsetHeight;
+            void outlineColorItem.offsetHeight;
+            void resetItem.offsetHeight;
+        }
+
+        // Update visibility when settings are loaded
+        function initializeVisibility() {
+            // Wait a bit for sdpi-components to initialize
+            setTimeout(() => {
+                updateProgressBarVisibility();
+            }, 50);
+        }
+
+        // Initialize on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener("DOMContentLoaded", initializeVisibility);
+        } else {
+            initializeVisibility();
+        }
+
+        // Handle reset button click
+        document.addEventListener("click", (ev) => {
+            if (ev.target && (ev.target.id === "resetProgressBarColors" || ev.target.closest("#resetProgressBarColors"))) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                
+                const fillEl = document.getElementById("barFillColor");
+                const bgEl = document.getElementById("barBgColor");
+                const outlineEl = document.getElementById("barOutlineColor");
+                
+                if (fillEl && bgEl && outlineEl) {
+                    // Reset to defaults
+                    const defaults = {
+                        fill: "#FFFFFF",
+                        bg: "#000000",
+                        outline: "#FFFFFF"
+                    };
+                    
+                    // Try to set values using sdpi-components API
+                    if (fillEl.value !== undefined) {
+                        fillEl.value = defaults.fill;
+                    }
+                    if (bgEl.value !== undefined) {
+                        bgEl.value = defaults.bg;
+                    }
+                    if (outlineEl.value !== undefined) {
+                        outlineEl.value = defaults.outline;
+                    }
+                    
+                    // Try setting via setAttribute as fallback
+                    fillEl.setAttribute("value", defaults.fill);
+                    bgEl.setAttribute("value", defaults.bg);
+                    outlineEl.setAttribute("value", defaults.outline);
+                    
+                    // Trigger input events to save settings
+                    fillEl.dispatchEvent(new Event("input", { bubbles: true, cancelable: true }));
+                    bgEl.dispatchEvent(new Event("input", { bubbles: true, cancelable: true }));
+                    outlineEl.dispatchEvent(new Event("input", { bubbles: true, cancelable: true }));
+                    
+                    // Also send to plugin for immediate update
+                    $PI.sendToPlugin({
+                        liveBarUpdate: true,
+                        barFillColor: defaults.fill,
+                        barBgColor: defaults.bg,
+                        barOutlineColor: defaults.outline
+                    });
+                }
+            }
+        });
+
+        // Update visibility when checkbox changes - listen for all input events
+        document.addEventListener("input", (ev) => {
+            const showProgressBarEl = document.getElementById("showProgressBar");
+            const target = ev.target;
+            
+            // Check if the change is related to the progress bar checkbox
+            if (showProgressBarEl && (
+                target === showProgressBarEl || 
+                target.closest("#showProgressBar") || 
+                (showProgressBarEl.contains && showProgressBarEl.contains(target)) ||
+                target.closest(showProgressBarEl) ||
+                (target.type === "checkbox" && showProgressBarEl.contains && showProgressBarEl.contains(target))
+            )) {
+                // Immediately update visibility with a small delay to ensure checkbox state is updated
+                setTimeout(() => {
+                    updateProgressBarVisibility();
+                }, 10);
+            }
+
+            // Handle color changes for live updates
+            const fillEl = document.getElementById("barFillColor");
+            const bgEl   = document.getElementById("barBgColor");
+            const outlineEl = document.getElementById("barOutlineColor");
+            if (!fillEl || !bgEl || !outlineEl) return;
+            if (!ev.target.closest("sdpi-color")) return;
+
+            $PI.sendToPlugin({
+                liveBarUpdate: true,
+                barFillColor: fillEl.value,
+                barBgColor: bgEl.value,
+                barOutlineColor: outlineEl.value
+            });
+        });
+
+        // Also listen for change events (some browsers/implementations use this)
+        document.addEventListener("change", (ev) => {
+            const showProgressBarEl = document.getElementById("showProgressBar");
+            const target = ev.target;
+            
+            if (showProgressBarEl && (
+                target === showProgressBarEl || 
+                target.closest("#showProgressBar") || 
+                (showProgressBarEl.contains && showProgressBarEl.contains(target)) ||
+                (target.type === "checkbox" && showProgressBarEl.contains && showProgressBarEl.contains(target))
+            )) {
+                setTimeout(() => {
+                    updateProgressBarVisibility();
+                }, 10);
+            }
+        });
+
+        // Settings are automatically saved by sdpi-components
+        // The plugin will receive didReceiveSettings events automatically
+        // No need for manual triggers
+    </script>
+
+</body>
+</html>

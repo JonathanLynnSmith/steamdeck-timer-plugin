@@ -1,0 +1,51 @@
+{
+	"Name": "streamdeck-timer-plugin",
+	"Version": "0.1.0.0",
+	"Author": "Jonathan Smith",
+	"Actions": [
+		{
+			"Name": "Timer Controller",
+			"UUID": "com.jonathan-smith.streamdeck-timer-plugin.timer-controller",
+			"Icon": "imgs/actions/timer-controller/icon",
+			"Tooltip": "Dial controls a grouped timer, key displays it.",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "layouts/custom-layout-5.json",
+				"TriggerDescription": {
+					"Push": "Start / Pause Timer",
+					"Rotate": "Adjust Duration",
+					"Touch": "Start / Pause Timer"
+				}
+			},
+			"States": [
+				{ "Image": "imgs/actions/timer-controller/resume", "Title": "" },
+				{ "Image": "imgs/actions/timer-controller/pause", "Title": "" }
+			],
+			"PropertyInspectorPath": "ui/timer-controller.html"
+		}
+	],
+	"Category": "streamdeck-timer-plugin",
+	"CategoryIcon": "imgs/plugin/category-icon",
+	"CodePath": "bin/plugin.js",
+	"Description": "quick practice project",
+	"Icon": "imgs/plugin/marketplace",
+	"SDKVersion": 2,
+	"Software": {
+		"MinimumVersion": "6.5"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "12"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Nodejs": {
+		"Version": "20",
+		"Debug": "enabled"
+	},
+	"UUID": "com.jonathan-smith.streamdeck-timer-plugin"
+}

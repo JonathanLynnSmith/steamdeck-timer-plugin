@@ -1,1 +1,0 @@
-# steamdeck-timer-plugin
